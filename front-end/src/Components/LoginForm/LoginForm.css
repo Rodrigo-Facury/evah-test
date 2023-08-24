@@ -1,0 +1,107 @@
+#login-form {
+  display: flex;
+  flex-direction: column;
+  width: 257px;
+  text-align: left;
+  font-family: 'Montserrat', sans-serif;
+  grid-area: lf;
+}
+
+#greeting {
+  font-weight: 400;
+  font-size: 40px;
+  color: rgba(56, 62, 113, 1);
+  margin: 0px;
+}
+
+#instructions {
+  font-weight: 600;
+  font-size: 16px;
+  color: rgba(152, 159, 219, 1);
+  margin: 15px 0px 25px 0px;
+  padding-right: 2px;
+}
+
+#login-form label {
+  font-weight: 400;
+  font-size: 10px;
+  color: rgba(56, 62, 113, 1);
+  margin: 8px;
+}
+
+.input {
+  height: 48px !important;
+  border-radius: 8px !important;
+  border: solid 1px rgba(152, 159, 219, 1) !important;
+  font-size: 10px !important;
+}
+
+::placeholder {
+  color: rgba(152, 159, 219, 1);
+  font-family: 'Montserrat', sans-serif;
+  opacity: 1;
+}
+
+:-ms-input-placeholder {
+  color: rgba(152, 159, 219, 1);
+  font-family: 'Montserrat', sans-serif;
+}
+
+::-ms-input-placeholder {
+  color: rgba(152, 159, 219, 1);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.error-message {
+  color: rgba(255, 55, 127, 1);
+  font-size: 10px;
+  padding-left: 17px;
+  margin-top: 8px;
+}
+
+.close-icon {
+  color: rgba(255, 55, 127, 1);
+  position: relative;
+  bottom: 73px;
+  left: 220px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4px;
+}
+
+#login-button {
+  font-weight: 600;
+  background: linear-gradient(to left, rgba(56, 62, 113, 1), rgba(157, 37, 176, 1));
+  color: rgba(255, 255, 255, 1);
+  margin: 25px 0px;
+  box-shadow: 0px 10px 25px 0px rgba(207, 153, 219, 1);
+  height: 48px;
+}
+
+#login-button:hover {
+  font-weight: 600;
+  background: rgba(157, 37, 176, 1);
+  box-shadow: 0px 15px 25px 0px rgba(207, 153, 219, 1);
+}
+
+#forgot-password {
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(152, 159, 219, 1);
+  text-align: center;
+}
+
+#here {
+  font-weight: 400;
+  font-size: 14px;
+  color: rgba(150, 38, 172, 1);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.error {
+  border-color: rgba(255, 55, 127, 1) !important;
+}
