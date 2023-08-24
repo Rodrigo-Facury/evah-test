@@ -1,8 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import './LoginForm.css'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Input, InputGroup, InputRightElement } from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
+import { Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { CloseIcon } from '@chakra-ui/icons'
+import { useState } from 'react'
+import secureLocalStorage from 'react-secure-storage'
+import axios from 'axios'
 
 interface IFormInputs {
   email: string
@@ -10,9 +13,36 @@ interface IFormInputs {
 }
 
 function LoginForm() {
-  const { register, formState: { errors }, handleSubmit } = useForm<IFormInputs>();
-  const onSubmit: SubmitHandler<IFormInputs> = data => console.log(data)
+  const { register, formState: { errors }, handleSubmit } = useForm<IFormInputs>()
   const navigate = useNavigate()
+  const [loginInfo, setLoginInfo] = useState<IFormInputs>({
+    email: '',
+    password: ''
+  })
+
+  const onSubmit: SubmitHandler<IFormInputs> = () => {
+    axios.post('http://localhost:3001/user/login', loginInfo)
+      .then(({ data }: { data: { token: string } }) => {
+        secureLocalStorage.setItem('etoken', data.token)
+        navigate('/')
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginInfo((prevInfo) => ({
+      ...prevInfo,
+      [name]: value
+    }))
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onSubmit(loginInfo)
+    }
+  }
 
   return (
     <form id='login-form' onSubmit={handleSubmit(onSubmit)}>
@@ -27,19 +57,22 @@ function LoginForm() {
             aria-invalid={errors.email ? 'true' : 'false'}
             className={errors.email ? 'input error' : 'input'}
             placeholder='user.name@mail.com'
+            onChange={handleChange}
+            onKeyUp={handleKeyPress}
           />
           <InputRightElement>
             <CloseIcon
               position='relative'
               top='4px'
+              right='5px'
               visibility={errors.email ? 'visible' : 'hidden'}
               color='rgba(255, 55, 127, 1)'
               boxSize='9.33px'
             />
           </InputRightElement>
         </InputGroup>
-        {errors.email?.type === 'required' && <p className='error-message'>E-mail é um campo obrigatório;</p>}
-        {errors.email?.type === 'pattern' && <p className='error-message'>Digite um e-mail válido;</p>}
+        {errors.email?.type === 'required' && <p className='error-message'>E-mail é um campo obrigatório</p>}
+        {errors.email?.type === 'pattern' && <p className='error-message'>Digite um e-mail válido</p>}
       </div>
       <div className='input-container'>
         <label htmlFor='password'>SENHA</label>
@@ -51,18 +84,21 @@ function LoginForm() {
             aria-invalid={errors.password ? 'true' : 'false'}
             className={errors.password ? 'input error' : 'input'}
             placeholder='*******'
+            onChange={handleChange}
+            onKeyUp={handleKeyPress}
           />
           <InputRightElement>
             <CloseIcon
               position='relative'
               top='4px'
+              right='5px'
               visibility={errors.password ? 'visible' : 'hidden'}
               color='rgba(255, 55, 127, 1)'
               boxSize='9.33px'
             />
           </InputRightElement>
         </InputGroup>
-        {errors.password?.type === 'required' && <p className='error-message'>Senha é um campo obrigatório;</p>}
+        {errors.password?.type === 'required' && <p className='error-message'>Senha é um campo obrigatório</p>}
       </div>
       <button id='login-button'>
         ENTRAR

@@ -6,6 +6,7 @@ import { TokenInfo } from '../types'
 import jwtDecode from 'jwt-decode'
 import UserContext from './contexts/UserContext'
 import Login from './Pages/Login/Login'
+import Home from './Pages/Home/Home'
 
 
 function App() {
@@ -25,14 +26,14 @@ function App() {
     } else if (document.location.pathname !== '/login') {
       document.location.replace('/login')
     }
-  }, [token])
+  }, [token, user])
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <BrowserRouter>
         <Routes>
           <Route path='/login' element={<Login />} />
-          <Route path='/' />
+          <Route path='/' element={<Home />} />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>
