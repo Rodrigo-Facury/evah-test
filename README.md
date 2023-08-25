@@ -115,12 +115,23 @@ E altere para as variáveis de sua preferência.
 npm run dev
 ```
 
-Obs.: Considerando que o modelo escolhido seja utilizando o banco de dados, é possível realizar login e logout com as credenciais do usuário teste:
+Obs.: Considerando que o modelo escolhido seja utilizando o banco de dados, é possível realizar login e logout com as credenciais do usuário teste criado na seeder.
+
+* Utilizando o banco de dados:
 
 ```javascript
 {
   email: 'user@test.com',
   password: 'senha-definida-no-.env'
+}
+```
+
+* Utilizando MOCK_DB:
+
+```javascript
+{
+  email: 'user_mock@test.com',
+  password: 'mock_password'
 }
 ```
 
