@@ -3,9 +3,12 @@ import './LoginForm.css'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import secureLocalStorage from 'react-secure-storage'
 import axios from 'axios'
+import UserContext from '../../contexts/UserContext'
+import jwtDecode from 'jwt-decode'
+import { TokenInfo } from '../../../types'
 
 interface IFormInputs {
   email: string
@@ -14,6 +17,7 @@ interface IFormInputs {
 
 function LoginForm() {
   const { register, formState: { errors }, handleSubmit } = useForm<IFormInputs>()
+  const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
   const [loginInfo, setLoginInfo] = useState<IFormInputs>({
     email: '',
@@ -24,6 +28,8 @@ function LoginForm() {
     axios.post('http://localhost:3001/user/login', loginInfo)
       .then(({ data }: { data: { token: string } }) => {
         secureLocalStorage.setItem('etoken', data.token)
+        const tokenInfo: TokenInfo = jwtDecode(data.token)
+        setUser(tokenInfo)
         navigate('/')
       })
       .catch((err) => {

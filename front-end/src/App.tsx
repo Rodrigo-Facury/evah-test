@@ -10,19 +10,20 @@ import Home from './Pages/Home/Home'
 
 
 function App() {
-  const [user, setUser] = useState<TokenInfo | null>()
+  const [user, setUser] = useState<TokenInfo | undefined>()
   const token = secureLocalStorage.getItem('etoken')
 
   useEffect(() => {
     if (token && typeof token === 'string') {
       const tokenInfo: TokenInfo = jwtDecode(token)
+      const invalidToken = tokenInfo.exp && tokenInfo.exp * 1000 < Date.now()
 
-      if (tokenInfo.exp && tokenInfo.exp * 1000 < Date.now() && document.location.pathname !== '/login') {
+      if (invalidToken && document.location.pathname !== '/login') {
         document.location.replace('/login')
         secureLocalStorage.removeItem('etoken')
       }
 
-      setUser(tokenInfo)
+      !user && setUser(tokenInfo)
     } else if (document.location.pathname !== '/login') {
       document.location.replace('/login')
     }

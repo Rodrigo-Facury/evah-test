@@ -1,5 +1,11 @@
-import { createContext } from 'react';
+import { Dispatch, SetStateAction, createContext } from 'react';
+import { TokenInfo } from '../../types';
 
-const UserContext = createContext({});
+interface IUserContext {
+  user?: TokenInfo
+  setUser: Dispatch<SetStateAction<TokenInfo | undefined>>
+}
+
+const UserContext = createContext<IUserContext>({ setUser: () => {} });
 
 export default UserContext;
