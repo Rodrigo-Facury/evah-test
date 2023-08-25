@@ -52,7 +52,7 @@ function LoginForm() {
 
   return (
     <form id='login-form' onSubmit={handleSubmit(onSubmit)}>
-      <h1 id='greeting'>Olá, seja bem-vindo!</h1>
+      <h1 id='greeting'>Olá, seja <br /> bem-vindo!</h1>
       <h3 id='instructions'>Para acessar a plataforma, faça seu login.</h3>
       <div className='input-container'>
         <label htmlFor='email'>E-MAIL</label>
@@ -110,7 +110,11 @@ function LoginForm() {
         ENTRAR
       </button>
 
-      <p id='forgot-password'>Esqueceu seu login ou senha? Clique <span id='here' onClick={() => navigate('/recover-password')}>aqui</span></p>
+      <p id='forgot-password'>
+        Esqueceu seu login ou senha?
+        <br />
+        Clique <span id='here' onClick={() => navigate('/recover-password')}>aqui</span>
+      </p>
     </form>
   )
 }

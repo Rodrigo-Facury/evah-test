@@ -29,3 +29,44 @@
     ". . . . . ."
     ". . . . . ."
 }
+
+@media only screen and (max-width: 768px) {
+  #login-hero {
+    background-position: 51%;
+    width: 41%;
+  }
+
+  #form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  #login-page {
+    background-color: rgba(19, 5, 37, 1);
+  }
+
+  #login-hero {
+    background-position: top;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+  }
+
+  #gradient {
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+  }
+
+  #form-container {
+    position: absolute;
+    height: 357px;
+    width: 311px;
+    top: 139px;
+    left: 32px;
+  }
+}
