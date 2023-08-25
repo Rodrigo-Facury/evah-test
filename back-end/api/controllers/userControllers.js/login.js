@@ -6,6 +6,22 @@ async function login(req, res, next) {
   try {
     const { body: { email, password } } = req;
 
+    if (process.env.MOCK_DB) {
+      const user = {
+        name: 'Mock User',
+        email: 'mock_user@test.com',
+        password: 'mock_password'
+      }
+
+      if (password === user.password) {
+        const token = createToken(user);
+
+        return res.status(200).json({ user, token });
+      }
+
+      return res.status(401).json({ message: 'Usuário ou senha incorretos.' });
+    }
+
     const foundUser = await User.findOne({
       where: { email }
     });
