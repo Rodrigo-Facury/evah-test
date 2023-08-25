@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import './LoginForm.css'
-import { useForm, SubmitHandler } from 'react-hook-form'
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useContext, useState } from 'react'
@@ -15,16 +14,47 @@ interface IFormInputs {
   password: string
 }
 
+interface IErrors {
+  email?: {
+    type?: string
+  }
+  password?: {
+    type?: string
+  }
+}
+
 function LoginForm() {
-  const { register, formState: { errors }, handleSubmit } = useForm<IFormInputs>()
   const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
   const [loginInfo, setLoginInfo] = useState<IFormInputs>({
     email: '',
     password: ''
   })
+  const [errors, setErrors] = useState<IErrors>({})
 
-  const onSubmit: SubmitHandler<IFormInputs> = () => {
+  const handleSubmit = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!loginInfo.email) {
+      setErrors((prev) => ({ ...prev, email: { type: 'required' } }))
+
+      return;
+    }
+
+    const validEmail = emailRegex.test(loginInfo.email)
+
+    if (!validEmail) {
+      setErrors((prev) => ({ ...prev, email: { type: 'pattern' } }))
+
+      return;
+    }
+
+    if (!loginInfo.password) {
+      setErrors((prev) => ({ ...prev, password: { type: 'required' } }))
+
+      return;
+    }
+
     axios.post('http://localhost:3001/user/login', loginInfo)
       .then(({ data }: { data: { token: string } }) => {
         secureLocalStorage.setItem('etoken', data.token)
@@ -42,16 +72,18 @@ function LoginForm() {
       ...prevInfo,
       [name]: value
     }))
+
+    setErrors((prev) => ({ ...prev, [name]: undefined }))
   }
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      onSubmit(loginInfo)
+      handleSubmit()
     }
   }
 
   return (
-    <form id='login-form' onSubmit={handleSubmit(onSubmit)}>
+    <form id='login-form'>
       <h1 id='greeting'>Olá, seja <br /> bem-vindo!</h1>
       <h3 id='instructions'>Para acessar a plataforma, faça seu login.</h3>
       <div className='input-container'>
@@ -59,7 +91,7 @@ function LoginForm() {
         <InputGroup>
           <Input
             id='email'
-            {...register('email', { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, required: true })}
+            name='email'
             aria-invalid={errors.email ? 'true' : 'false'}
             className={errors.email ? 'input error' : 'input'}
             placeholder='user.name@mail.com'
@@ -86,7 +118,7 @@ function LoginForm() {
           <Input
             id='password'
             type='password'
-            {...register('password', { required: true })}
+            name='password'
             aria-invalid={errors.password ? 'true' : 'false'}
             className={errors.password ? 'input error' : 'input'}
             placeholder='*******'
@@ -104,9 +136,9 @@ function LoginForm() {
             />
           </InputRightElement>
         </InputGroup>
-        {errors.password?.type === 'required' && <p className='error-message'>Senha é um campo obrigatório</p>}
+        {errors.password && <p className='error-message'>Senha é um campo obrigatório</p>}
       </div>
-      <button id='login-button'>
+      <button type='button' id='login-button' onClick={handleSubmit}>
         ENTRAR
       </button>
 
